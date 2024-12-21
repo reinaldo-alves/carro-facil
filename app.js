@@ -1,25 +1,35 @@
-const http = require('http');
-const Utilitario = require('./models/utilitario');
+const express = require('express');
 
-const requestListener = (req, res) => {
-    const { method, url } = req;
-    if(method === 'POST' && url === '/carro/construir') {
-        let body = new Utilitario('ABC123', 1993, 'bege', 'Fusca', '60 mil', '115', 'Muito bom', 4, '10L', '15km/L');
-        req.on('data', chunk => {
-            body = chunk.toString();
-        })
-        req.on('end', () => {
-            res.writeHead(200, {'Content-type':'application/json'});
-            res.end(JSON.stringify(body));
-        })
-    }
-}
+//Criando o ambiente do express
+const app = express();
 
-const server = http.createServer(requestListener);
+app.use(express.json());
+app.use(express.urlencoded({extended: true}));
+
+var utilitarioRouter = require('./routes/utilitarioRouter');
+app.use('/', utilitarioRouter);
+
+var carroRouter = require('./routes/carroRouter');
+app.use('/', carroRouter);
+
+var esportivoRouter = require('./routes/esportivoRouter');
+app.use('/', esportivoRouter);
+
+var clienteRouter = require('./routes/clienteRouter');
+app.use('/', clienteRouter);
+
+var funcionarioRouter = require('./routes/funcionarioRouter');
+app.use('/', funcionarioRouter);
+
+var promocaoRouter = require('./routes/promocaoRouter');
+app.use('/', promocaoRouter);
+
+var reservaRouter = require('./routes/reservaRouter');
+app.use('/', reservaRouter);
 
 const port = 5000;
-const ip = '127.0.0.1'
+const host = '0.0.0.0'
 
-server.listen(port, ip, () => {
+app.listen(port, host, () => {
     console.log(`Servidor executando na porta ${port}`);
 })

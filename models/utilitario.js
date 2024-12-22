@@ -1,15 +1,23 @@
-const Carro = require('./carro');
+const mongoose = require('mongoose');
 
-class Utilitario extends Carro {
-    constructor(placa, ano, cor, modelo, quilometragem, vDiaria, observacao, qtPassageiro, tmBagageiro, kmLitro) {
-        if(vDiaria <= 0) {
-            throw new Error('O valor da diária do carro não pode ser menor ou igual a zero');
-        }
-        super(placa, ano, cor, modelo, quilometragem, vDiaria, observacao);
-        this.qtPassageiro = qtPassageiro;
-        this.tmBagageiro = tmBagageiro;
-        this.kmLitro = kmLitro;
+const Utilitario = mongoose.Schema({
+    idCarro: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Carro',
+        required: true
+    },
+    qtPassageiro: {
+        type: Number,
+        required: false
+    },
+    tmBagageiro: {
+        type: Number,
+        required: false
+    },
+    kmLitro: {
+        type: Number,
+        required: false
     }
-}
+}, { VersionKey: false })
 
-module.exports = Utilitario;
+module.exports = mongoose.model('Utilitario', Utilitario);

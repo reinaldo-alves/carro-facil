@@ -27,9 +27,20 @@ app.use('/', promocaoRouter);
 var reservaRouter = require('./routes/reservaRouter');
 app.use('/', reservaRouter);
 
+const db = require('./configs/database')
+
 const port = 5000;
 const host = '0.0.0.0'
 
-app.listen(port, host, () => {
-    console.log(`Servidor executando na porta ${port}`);
+db.mongoose.connect(db.url, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+}).then(() => {
+    console.log('Conectado ao banco de dados com sucesso');
+    app.listen(port, host, () => {
+        console.log(`Servidor executando na porta ${port}`);
+    })
+}).catch(err => {
+    console.error(`Erro ao conectar ao banco de dados: ${err.message}`, err);
+    process.exit(1);
 })
